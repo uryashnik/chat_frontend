@@ -14,7 +14,8 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
   const [isPending, startTransition] = useTransition();
 
   const currentTag = searchParams.get('tagId') ?? '';
-  const currentDate = searchParams.get('date') ?? '';
+  const currentDateFrom = searchParams.get('dateFrom') ?? '';
+  const currentDateTo = searchParams.get('dateTo') ?? '';
 
   function updateParam(key: string, value: string) {
     const params = new URLSearchParams(searchParams.toString());
@@ -35,25 +36,46 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
     });
   }
 
-  const hasActiveFilters = currentTag || currentDate;
+  const hasActiveFilters = currentTag || currentDateFrom || currentDateTo;
+
+  const inputClass =
+    'h-9 px-3 rounded-lg border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition';
 
   return (
     <div className="bg-white dark:bg-zinc-800 rounded-xl px-5 py-4 shadow-sm border border-zinc-200 dark:border-zinc-700">
       <div className="flex flex-wrap items-end gap-4">
         <div className="flex flex-col gap-1.5">
           <label
-            htmlFor="filter-date"
+            htmlFor="filter-date-from"
             className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide"
           >
-            Дата
+            С (дата и время)
           </label>
           <input
-            id="filter-date"
-            type="date"
-            value={currentDate}
-            onChange={(e) => updateParam('date', e.target.value)}
+            id="filter-date-from"
+            type="datetime-local"
+            value={currentDateFrom}
+            onChange={(e) => updateParam('dateFrom', e.target.value)}
             disabled={isPending}
-            className="h-9 px-3 rounded-lg border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition"
+            className={inputClass}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1.5">
+          <label
+            htmlFor="filter-date-to"
+            className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide"
+          >
+            По (дата и время)
+          </label>
+          <input
+            id="filter-date-to"
+            type="datetime-local"
+            value={currentDateTo}
+            min={currentDateFrom || undefined}
+            onChange={(e) => updateParam('dateTo', e.target.value)}
+            disabled={isPending}
+            className={inputClass}
           />
         </div>
 

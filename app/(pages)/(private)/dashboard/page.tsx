@@ -5,12 +5,13 @@ import DashboardContent from './components/dashboard-content';
 export default async function DashboardPage({
   searchParams,
 }: {
-  searchParams: Promise<{ page?: string; tagId?: string; date?: string }>;
+  searchParams: Promise<{ page?: string; tagId?: string; dateFrom?: string; dateTo?: string }>;
 }) {
   const params = await searchParams;
   const page = Math.max(1, Number(params.page ?? 1) || 1);
   const tagId = params.tagId;
-  const date = params.date;
+  const dateFrom = params.dateFrom;
+  const dateTo = params.dateTo;
 
   return (
     <div className="min-h-screen flex flex-col bg-zinc-100 dark:bg-zinc-900">
@@ -28,7 +29,7 @@ export default async function DashboardPage({
             </div>
           }
         >
-          <DashboardContent page={page} tagId={tagId} date={date} />
+          <DashboardContent page={page} tagId={tagId} dateFrom={dateFrom} dateTo={dateTo} />
         </Suspense>
       </main>
     </div>

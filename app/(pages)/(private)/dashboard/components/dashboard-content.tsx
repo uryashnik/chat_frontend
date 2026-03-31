@@ -29,14 +29,16 @@ async function getTags(cookieHeader: string): Promise<Tag[]> {
 async function getMessages(
   page: number,
   tagId: string | undefined,
-  date: string | undefined,
+  dateFrom: string | undefined,
+  dateTo: string | undefined,
   cookieHeader: string,
 ): Promise<MessagesResponse> {
   const url = new URL(`${API_BASE}/messages`);
   url.searchParams.set('limit', String(MESSAGES_LIMIT));
   url.searchParams.set('page', String(page));
   if (tagId) url.searchParams.set('tagId', tagId);
-  if (date) url.searchParams.set('date', date);
+  if (dateFrom) url.searchParams.set('dateFrom', new Date(dateFrom).toISOString());
+  if (dateTo) url.searchParams.set('dateTo', new Date(dateTo).toISOString());
 
   try {
     const res = await fetch(url.toString(), {
@@ -74,15 +76,16 @@ function emptyResponse(page: number): MessagesResponse {
 interface DashboardContentProps {
   page: number;
   tagId?: string;
-  date?: string;
+  dateFrom?: string;
+  dateTo?: string;
 }
 
-export default async function DashboardContent({ page, tagId, date }: DashboardContentProps) {
+export default async function DashboardContent({ page, tagId, dateFrom, dateTo }: DashboardContentProps) {
   const cookieHeader = await getCookieHeader();
 
   const [tags, messagesData] = await Promise.all([
     getTags(cookieHeader),
-    getMessages(page, tagId, date, cookieHeader),
+    getMessages(page, tagId, dateFrom, dateTo, cookieHeader),
   ]);
 
   const totalPages = messagesData.meta?.totalPages ?? 1;
