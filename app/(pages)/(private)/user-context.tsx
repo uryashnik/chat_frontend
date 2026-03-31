@@ -1,17 +1,9 @@
 'use client';
 
 import { createContext, useContext } from 'react';
+import type { User } from '@/app/src/types/user';
 
-export interface User {
-  id: number;
-  gender: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  createdAt: string;
-  updatedAt: string;
-  deletedAt: string | null;
-}
+export type { User };
 
 const UserContext = createContext<User | null>(null);
 

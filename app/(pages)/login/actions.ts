@@ -2,8 +2,7 @@
 
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
-
-const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*[!@#$%^&*])/;
+import { PASSWORD_REGEX } from '@/app/src/constants/validation';
 
 export interface LoginState {
   errors?: {

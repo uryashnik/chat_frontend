@@ -1,7 +1,6 @@
 'use server';
 
-const PASSWORD_REGEX = /^(?=.*[A-Z])(?=.*[!@#$%^&*])/;
-const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+import { EMAIL_REGEX, PASSWORD_REGEX } from '@/app/src/constants/validation';
 
 export interface RegisterState {
   errors?: {
