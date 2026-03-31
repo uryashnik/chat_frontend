@@ -2,7 +2,6 @@
 
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
 import type { Tag, MessagesResponse } from '@/app/src/types/message';
 
 const MESSAGES_LIMIT = 2;
@@ -87,46 +86,3 @@ export async function logoutAction(): Promise<void> {
   redirect('/login');
 }
 
-export async function deleteMessageAction(id: number): Promise<{ error?: string }> {
-  const cookieHeader = await getCookieHeader();
-
-  try {
-    const res = await fetch(`${process.env.API_BASE}/messages/${id}`, {
-      method: 'DELETE',
-      headers: { Cookie: cookieHeader },
-    });
-
-    const result = await res.json();
-    if (!res.ok) return { error: result.message ?? 'Не удалось удалить сообщение' };
-
-    revalidatePath('/dashboard');
-    return {};
-  } catch {
-    return { error: 'Ошибка сети' };
-  }
-}
-
-export async function updateMessageAction(
-  id: number,
-  data: { text?: string; tagId?: number },
-): Promise<{ error?: string }> {
-  const cookieHeader = await getCookieHeader();
-
-  try {
-    const res = await fetch(`${process.env.API_BASE}/messages/34`, {
-      method: 'PATCH',
-      headers: {
-        Cookie: cookieHeader,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
-    const result = await res.json();
-    if (!res.ok) return { error: result.message ?? 'Не удалось обновить сообщение' };
-
-    revalidatePath('/dashboard');
-    return {};
-  } catch {
-    return { error: 'Ошибка сети' };
-  }
-}

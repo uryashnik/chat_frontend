@@ -3,8 +3,9 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import type { Message, Tag } from '@/app/src/types/message';
-import MessageCard from './message-card';
-import MessageModal from './message-modal';
+import MessageCard from './card';
+import EditMessageModal from './edit-modal';
+import DeleteMessageModal from './delete-modal';
 
 const NoMessages = () => (
   <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -21,23 +22,35 @@ interface IProps {
   tags: Tag[];
 }
 
-export default function MessagesList({ messages, tags }: IProps) {
-  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+export default function Messages({ messages, tags }: IProps) {
+  const [editMessage, setEditMessage] = useState<Message | null>(null);
+  const [deleteMessage, setDeleteMessage] = useState<Message | null>(null);
 
   return (
     <>
-      {selectedMessage && (
-        <MessageModal
-          message={selectedMessage}
+      {editMessage && (
+        <EditMessageModal
+          message={editMessage}
           tags={tags}
-          onClose={() => setSelectedMessage(null)}
+          onClose={() => setEditMessage(null)}
+        />
+      )}
+      {deleteMessage && (
+        <DeleteMessageModal
+          message={deleteMessage}
           isLastOnPage={messages.length === 1}
+          onClose={() => setDeleteMessage(null)}
         />
       )}
       {!!messages.length ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {messages.map((message) => (
-            <MessageCard key={message.id} message={message} onClick={() => setSelectedMessage(message)} />
+            <MessageCard
+              key={message.id}
+              message={message}
+              onEdit={() => setEditMessage(message)}
+              onDelete={() => setDeleteMessage(message)}
+            />
           ))}
         </div>
       ) : (

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import FilterPanel from './filter-panel';
-import MessagesList from './messages-list';
+import Messages from './messages';
 import Pagination from './navigation';
 import { getTags, getMessages } from '../actions';
 
@@ -25,7 +25,7 @@ export default async function Content({ page, tagId, dateFrom, dateTo }: IProps)
         <FilterPanel tags={tags} />
       </Suspense>
 
-      <MessagesList messages={messagesData.data} tags={tags} />
+      <Messages messages={messagesData.data} tags={tags} />
 
       <Suspense>
         <Pagination currentPage={page} totalPages={totalPages} />
