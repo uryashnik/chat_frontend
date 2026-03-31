@@ -16,6 +16,8 @@ function formatDate(dateString: string): string {
   }
 }
 
+const buttonClasses = "w-7 h-7 flex items-center justify-center rounded-lg bg-zinc-100/40 dark:bg-zinc-600/80 transition cursor-pointer hover:opacity-100"
+
 interface MessageCardProps {
   message: Message;
   onEdit: () => void;
@@ -44,27 +46,28 @@ export default function MessageCard({ message, onEdit, onDelete }: MessageCardPr
         </div>
 
         <div className="flex items-center gap-1 shrink-0">
-          {message.tag && (
-            <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800/50">
-              #{message.tag.label}
-            </span>
-          )}
           <button
             onClick={onEdit}
             title="Edit"
-            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition cursor-pointer opacity-40 hover:opacity-100"
+            className={`${buttonClasses} hover:bg-blue-100 dark:hover:bg-blue-900/40`}
           >
             <Image src="/pencil.svg" alt="Edit" width={14} height={14} />
           </button>
           <button
             onClick={onDelete}
             title="Delete"
-            className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition cursor-pointer opacity-40 hover:opacity-100"
+            className={`${buttonClasses} hover:bg-red-100 dark:hover:bg-red-900/40`}
           >
             <Image src="/trash.svg" alt="Delete" width={14} height={14} />
           </button>
         </div>
       </div>
+
+      {message.tag && (
+        <span className="self-start text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800/50">
+          #{message.tag.label}
+        </span>
+      )}
 
       <p className="text-sm text-zinc-600 dark:text-zinc-300 leading-relaxed line-clamp-4">{message.text}</p>
     </article>
