@@ -6,17 +6,11 @@ import { loginAction, type LoginState } from './actions';
 const initialState: LoginState = {};
 
 export function Form() {
-  const [login, setLogin] = useState('');
+  const [email, setEmail] = useState('');
   const [state, formAction, isPending] = useActionState(loginAction, initialState);
 
   return (
     <>
-      {state.success && (
-        <div className="mb-4 rounded-lg bg-green-50 dark:bg-green-900/30 border border-green-200 dark:border-green-700 px-4 py-3 text-sm text-green-700 dark:text-green-300">
-          You have successfully logged in.
-        </div>
-      )}
-
       {state.errors?.general && (
         <div className="mb-4 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-700 px-4 py-3 text-sm text-red-600 dark:text-red-300">
           {state.errors.general}
@@ -26,27 +20,27 @@ export function Form() {
       <form action={formAction} noValidate className="flex flex-col gap-5">
         <div className="flex flex-col gap-1.5">
           <label
-            htmlFor="login"
+            htmlFor="email"
             className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
           >
-            Login
+            Email
           </label>
           <input
-            id="login"
-            name="login"
-            type="text"
-            autoComplete="username"
-            placeholder="Enter your login"
-            value={login}
-            onChange={(e) => setLogin(e.target.value)}
+            id="email"
+            name="email"
+            type="email"
+            autoComplete="email"
+            placeholder="you@example.com"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
             className={`w-full rounded-lg border px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white bg-white dark:bg-zinc-700 outline-none transition placeholder:text-zinc-400 dark:placeholder:text-zinc-500 focus:ring-2 focus:ring-offset-0 ${
-              state.errors?.login
+              state.errors?.email
                 ? 'border-red-400 focus:ring-red-300 dark:border-red-500 dark:focus:ring-red-700'
                 : 'border-zinc-300 dark:border-zinc-600 focus:ring-zinc-400 dark:focus:ring-zinc-500'
             }`}
           />
-          {state.errors?.login && (
-            <p className="text-xs text-red-500 dark:text-red-400">{state.errors.login}</p>
+          {state.errors?.email && (
+            <p className="text-xs text-red-500 dark:text-red-400">{state.errors.email}</p>
           )}
         </div>
 
