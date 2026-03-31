@@ -4,7 +4,7 @@ import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
 import type { Tag, MessagesResponse } from '@/app/src/types/message';
 
-const MESSAGES_LIMIT = 2;
+const MESSAGES_LIMIT = 6;
 
 async function getCookieHeader(): Promise<string> {
   return (await headers()).get('cookie') ?? '';

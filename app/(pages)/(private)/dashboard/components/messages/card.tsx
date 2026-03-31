@@ -6,7 +6,7 @@ import type { Message } from '@/app/src/types/message';
 
 function formatDate(dateString: string): string {
   try {
-    return new Date(dateString).toLocaleDateString('ru-RU', {
+    return new Date(dateString).toLocaleDateString('en-US', {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -51,17 +51,17 @@ export default function MessageCard({ message, onEdit, onDelete }: MessageCardPr
           )}
           <button
             onClick={onEdit}
-            title="Редактировать"
+            title="Edit"
             className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/20 transition cursor-pointer opacity-40 hover:opacity-100"
           >
-            <Image src="/pencil.svg" alt="Редактировать" width={14} height={14} />
+            <Image src="/pencil.svg" alt="Edit" width={14} height={14} />
           </button>
           <button
             onClick={onDelete}
-            title="Удалить"
+            title="Delete"
             className="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition cursor-pointer opacity-40 hover:opacity-100"
           >
-            <Image src="/trash.svg" alt="Удалить" width={14} height={14} />
+            <Image src="/trash.svg" alt="Delete" width={14} height={14} />
           </button>
         </div>
       </div>

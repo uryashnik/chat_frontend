@@ -20,7 +20,7 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
     const params = new URLSearchParams(searchParams.toString());
     params.set('page', String(page));
     startTransition(() => {
-      router.push(`?${params.toString()}`);
+      router.push(`?${params.toString()}`, { scroll: true });
     });
   }
 
