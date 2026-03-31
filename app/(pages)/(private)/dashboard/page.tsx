@@ -9,9 +9,7 @@ export default async function DashboardPage({
 }) {
   const params = await searchParams;
   const page = Math.max(1, Number(params.page ?? 1) || 1);
-  const tagId = params.tagId;
-  const dateFrom = params.dateFrom;
-  const dateTo = params.dateTo;
+  const {tagId, dateFrom, dateTo} = params;
 
   return (
     <div className="min-h-screen flex flex-col bg-zinc-100 dark:bg-zinc-900">

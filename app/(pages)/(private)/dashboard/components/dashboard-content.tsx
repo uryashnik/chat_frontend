@@ -2,8 +2,8 @@ import { headers } from 'next/headers';
 import { Suspense } from 'react';
 import FilterPanel from './filter-panel';
 import MessagesList from './messages-list';
-import Pagination from './pagination';
 import type { Tag, MessagesResponse } from '@/app/src/types/message';
+import Pagination from './pagination';
 
 const API_BASE = 'http://localhost:3000';
 const MESSAGES_LIMIT = 2;

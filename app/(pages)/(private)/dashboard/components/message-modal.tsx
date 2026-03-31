@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Message, Tag } from '@/app/src/types/message';
+import Select from '@/app/src/components/select';
 import { deleteMessageAction, updateMessageAction } from '../actions';
 
 interface MessageModalProps {
@@ -178,28 +179,25 @@ export default function MessageModal({ message, tags, onClose }: MessageModalPro
 
               {/* Tag */}
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
-                  Тег
-                </label>
+      
                 {mode === 'edit' ? (
-                  <select
+                  <Select
                     value={editTagId}
-                    onChange={(e) => setEditTagId(e.target.value)}
+                    onChange={setEditTagId}
+                    options={tags.map((tag) => ({ id: tag.id, label: tag.label }))}
+                    placeholder="Без тега"
                     disabled={isPending}
                     className="h-9 px-3 rounded-lg border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition appearance-none cursor-pointer"
-                  >
-                    <option value="">Без тега</option>
-                    {tags.map((tag) => (
-                      <option key={tag.id} value={String(tag.id)}>
-                        #{tag.name}
-                      </option>
-                    ))}
-                  </select>
+                  />
                 ) : (
                   message.tag ? (
+                    <>
+                    <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide">
+                  Тег
+                </label>
                     <span className="inline-flex w-fit text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800/50">
-                      #{message.tag.name}
-                    </span>
+                      #{message.tag.label}
+                    </span></>
                   ) : (
                     <span className="text-xs text-zinc-400 dark:text-zinc-500">Без тега</span>
                   )

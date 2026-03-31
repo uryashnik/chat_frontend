@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import type { Tag } from '@/app/src/types/message';
 import DatePicker from '@/app/src/components/date-picker';
+import Select from '@/app/src/components/select';
 
 interface FilterPanelProps {
   tags: Tag[];
@@ -49,7 +50,6 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
           onChange={(value) => updateParam('dateFrom', value)}
           disabled={isPending}
         />
-
         <DatePicker
           id="filter-date-to"
           label="To (date & time)"
@@ -59,28 +59,15 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
           disabled={isPending}
         />
 
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="filter-tag"
-            className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide"
-          >
-            Tag
-          </label>
-          <select
-            id="filter-tag"
-            value={currentTag}
-            onChange={(e) => updateParam('tagId', e.target.value)}
-            disabled={isPending}
-            className="h-9 px-3 rounded-lg border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition appearance-none pr-8 cursor-pointer"
-          >
-            <option value="">All tags</option>
-            {tags.map((tag) => (
-              <option key={tag.id} value={String(tag.id)}>
-                #{tag.label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          id="filter-tag"
+          label="Tag"
+          value={currentTag}
+          onChange={(value) => updateParam('tagId', value)}
+          options={tags.map((tag) => ({ id: tag.id, label: tag.label }))}
+          placeholder="All tags"
+          disabled={isPending}
+        />
 
         {hasActiveFilters && (
           <button

@@ -63,7 +63,7 @@ export default function MessageCard({ message, onClick }: MessageCardProps) {
 
         {message.tag && (
           <span className="shrink-0 text-xs font-medium px-2.5 py-1 rounded-full bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 border border-blue-100 dark:border-blue-800/50">
-            #{message.tag.name}
+            #{message.tag.label}
           </span>
         )}
       </div>
