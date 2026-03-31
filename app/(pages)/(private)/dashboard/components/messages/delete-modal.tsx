@@ -30,6 +30,11 @@ export default function DeleteMessageModal({ message, isLastOnPage, onClose }: D
   
     const result = await deleteMessage(message.id);
   
+    if (result.status === 401) {
+      router.push('/login');
+      return;
+    }
+
     if (result.error) {
       setError(result.error);
       setLoading(false);

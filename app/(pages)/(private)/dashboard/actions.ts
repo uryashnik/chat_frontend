@@ -20,7 +20,7 @@ function emptyResponse(page: number): MessagesResponse {
 export async function getTags(): Promise<Tag[]> {
   const cookieHeader = await getCookieHeader();
   try {
-    const res = await fetch(`${process.env.API_BASE}/messages/tags`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/messages/tags`, {
       headers: { Cookie: cookieHeader },
       cache: 'no-store',
     });
@@ -35,7 +35,7 @@ export async function getTags(): Promise<Tag[]> {
 export async function getUsers(): Promise<User[]> {
   const cookieHeader = await getCookieHeader();
   try {
-    const res = await fetch(`${process.env.API_BASE}/users`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/users`, {
       headers: { Cookie: cookieHeader },
       cache: 'no-store',
     });
@@ -55,7 +55,7 @@ export async function getMessages(
   dateTo?: string,
 ): Promise<MessagesResponse> {
   const cookieHeader = await getCookieHeader();
-  const url = new URL(`${process.env.API_BASE}/messages`);
+  const url = new URL(`${process.env.NEXT_PUBLIC_API_BASE}/messages`);
   url.searchParams.set('limit', String(MESSAGES_LIMIT));
   url.searchParams.set('page', String(page));
   if (tagId) url.searchParams.set('tagId', tagId);
@@ -93,7 +93,7 @@ export async function logoutAction(): Promise<void> {
   const cookieHeader = await getCookieHeader();
 
   try {
-    await fetch(`${process.env.API_BASE}/auth/logout`, {
+    await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/auth/logout`, {
       method: 'POST',
       headers: { Cookie: cookieHeader },
       cache: 'no-store',
