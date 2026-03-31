@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 
@@ -30,11 +31,9 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       <PaginationButton
         onClick={() => goToPage(currentPage - 1)}
         disabled={currentPage <= 1 || isPending}
-        aria-label="Предыдущая страница"
+        aria-label="Previous page"
       >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" />
-        </svg>
+        <Image src="/chevron-left.svg" alt="" width={16} height={16} />
       </PaginationButton>
 
       {pages.map((item, idx) =>
@@ -57,11 +56,9 @@ export default function Pagination({ currentPage, totalPages }: PaginationProps)
       <PaginationButton
         onClick={() => goToPage(currentPage + 1)}
         disabled={currentPage >= totalPages || isPending}
-        aria-label="Следующая страница"
+        aria-label="Next page"
       >
-        <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-        </svg>
+        <Image src="/chevron-right.svg" alt="" width={16} height={16} />
       </PaginationButton>
     </div>
   );
