@@ -1,6 +1,7 @@
 'use client';
 
 import { useActionState, useState } from 'react';
+import Link from 'next/link';
 import { loginAction, type LoginState } from './actions';
 
 const initialState: LoginState = {};
@@ -67,6 +68,16 @@ export function Form() {
             <p className="text-xs text-red-500 dark:text-red-400">{state.errors.password}</p>
           )}
         </div>
+
+        <p className="text-center text-sm text-zinc-500 dark:text-zinc-400">
+          Don&apos;t have an account?{' '}
+          <Link
+            href="/register"
+            className="font-medium text-zinc-900 dark:text-white underline underline-offset-2 hover:text-zinc-600 dark:hover:text-zinc-300 transition"
+          >
+            Registration
+          </Link>
+        </p>
 
         <button
           type="submit"

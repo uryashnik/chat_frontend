@@ -1,6 +1,7 @@
 export interface ApiResponse<T = unknown> {
   data?: T;
   error?: string;
+  status?: number;
 }
 
 export async function apiFetch<T = unknown>(url: string, options?: RequestInit): Promise<ApiResponse<T>> {
@@ -21,11 +22,13 @@ export async function apiFetch<T = unknown>(url: string, options?: RequestInit):
     if (!res.ok) {
       return {
         error: body?.message ?? 'Request failed',
+        status: res.status,
       };
     }
 
     return {
       data: body,
+      status: res.status,
     };
   } catch {
     return {
