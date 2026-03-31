@@ -5,27 +5,16 @@ import { useRouter } from 'next/navigation';
 import type { Message, Tag } from '@/app/src/types/message';
 import Select from '@/app/src/components/select';
 import ModalShell from '@/app/src/components/modal-shell';
+import {apiFetch} from '@/app/src/utils/api-fetch.util';
 
-
-async function updateMessage(
+export function updateMessage(
   id: number,
   data: { text?: string; tagId?: number },
-): Promise<{ error?: string }> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/messages/${id}`, {
-      method: 'PATCH',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    });
-    if (!res.ok) {
-      const result = await res.json().catch(() => ({}));
-      return { error: result.message ?? 'Failed to update message' };
-    }
-    return {};
-  } catch {
-    return { error: 'Network error' };
-  }
+) {
+  return apiFetch(`${process.env.NEXT_PUBLIC_API_BASE}/messages/${id}`, {
+    method: 'PATCH',
+    body: JSON.stringify(data),
+  });
 }
 
 function formatDate(dateString: string): string {
@@ -50,7 +39,7 @@ interface EditMessageModalProps {
 
 export default function EditMessageModal({ message, tags, onClose }: EditMessageModalProps) {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [editText, setEditText] = useState(message.text);
   const [editTagId, setEditTagId] = useState<string>(String(message.tag?.id ?? ''));
@@ -60,22 +49,23 @@ export default function EditMessageModal({ message, tags, onClose }: EditMessage
     textareaRef.current?.focus();
   }, []);
 
-  function handleSave() {
+  async function handleSave() {
     setError(null);
-    startTransition(async () => {
-      const result = await updateMessage(message.id, {
-        text: editText.trim() || undefined,
-        tagId: editTagId ? Number(editTagId) : undefined,
-      });
-
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
-
-      router.refresh();
-      onClose();
+    setLoading(true);
+  
+    const result = await updateMessage(message.id, {
+      text: editText.trim() || undefined,
+      tagId: editTagId ? Number(editTagId) : undefined,
     });
+  
+    if (result.error) {
+      setError(result.error);
+      setLoading(false);
+      return;
+    }
+  
+    router.refresh();
+    onClose();
   }
 
   return (

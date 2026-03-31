@@ -4,21 +4,12 @@ import { useState, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import type { Message } from '@/app/src/types/message';
 import ModalShell from '@/app/src/components/modal-shell';
+import {apiFetch} from '@/app/src/utils/api-fetch.util';
 
-async function deleteMessage(id: number): Promise<{ error?: string }> {
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_API_BASE}/messages/${id}`, {
-      method: 'DELETE',
-      credentials: 'include',
-    });
-    if (!res.ok) {
-      const result = await res.json().catch(() => ({}));
-      return { error: result.message ?? 'Failed to delete message' };
-    }
-    return {};
-  } catch {
-    return { error: 'Network error' };
-  }
+export function deleteMessage(id: number) {
+  return apiFetch(`${process.env.NEXT_PUBLIC_API_BASE}/messages/${id}`, {
+    method: 'DELETE',
+  });
 }
 
 interface DeleteMessageModalProps {
@@ -30,29 +21,32 @@ interface DeleteMessageModalProps {
 export default function DeleteMessageModal({ message, isLastOnPage, onClose }: DeleteMessageModalProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  function handleDelete() {
+  async function handleDelete() {
     setError(null);
-    startTransition(async () => {
-      const result = await deleteMessage(message.id);
-
-      if (result.error) {
-        setError(result.error);
-        return;
-      }
-
-      const currentPage = Number(searchParams.get('page') ?? 1);
-      if (isLastOnPage && currentPage > 1) {
-        const params = new URLSearchParams(searchParams.toString());
-        params.set('page', String(currentPage - 1));
-        router.push(`?${params.toString()}`);
-      } else {
-        router.refresh();
-      }
-      onClose();
-    });
+    setLoading(true);
+  
+    const result = await deleteMessage(message.id);
+  
+    if (result.error) {
+      setError(result.error);
+      setLoading(false);
+      return;
+    }
+  
+    const currentPage = Number(searchParams.get('page') ?? 1);
+  
+    if (isLastOnPage && currentPage > 1) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('page', String(currentPage - 1));
+      router.push(`?${params.toString()}`);
+    } else {
+      router.refresh();
+    }
+  
+    onClose();
   }
 
   return (
