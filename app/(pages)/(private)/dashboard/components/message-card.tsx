@@ -37,11 +37,15 @@ function formatDate(dateString: string): string {
 
 interface MessageCardProps {
   message: Message;
+  onClick?: () => void;
 }
 
-export default function MessageCard({ message }: MessageCardProps) {
+export default function MessageCard({ message, onClick }: MessageCardProps) {
   return (
-    <article className="bg-white dark:bg-zinc-800 rounded-xl p-5 shadow-sm border border-zinc-200 dark:border-zinc-700 flex flex-col gap-4 hover:shadow-md transition-shadow">
+    <article
+      onClick={onClick}
+      className="bg-white dark:bg-zinc-800 rounded-xl p-5 shadow-sm border border-zinc-200 dark:border-zinc-700 flex flex-col gap-4 hover:shadow-md transition-shadow cursor-pointer select-none"
+    >
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-10 h-10 rounded-full overflow-hidden shrink-0 shadow-sm">

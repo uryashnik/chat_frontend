@@ -1,11 +1,18 @@
-import type { Message } from '@/app/src/types/message';
+'use client';
+
+import { useState } from 'react';
+import type { Message, Tag } from '@/app/src/types/message';
 import MessageCard from './message-card';
+import MessageModal from './message-modal';
 
 interface MessagesListProps {
   messages: Message[];
+  tags: Tag[];
 }
 
-export default function MessagesList({ messages }: MessagesListProps) {
+export default function MessagesList({ messages, tags }: MessagesListProps) {
+  const [selectedMessage, setSelectedMessage] = useState<Message | null>(null);
+
   if (messages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-16 text-center">
@@ -33,10 +40,24 @@ export default function MessagesList({ messages }: MessagesListProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-      {messages.map((message) => (
-        <MessageCard key={message.id} message={message} />
-      ))}
-    </div>
+    <>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        {messages.map((message) => (
+          <MessageCard
+            key={message.id}
+            message={message}
+            onClick={() => setSelectedMessage(message)}
+          />
+        ))}
+      </div>
+
+      {selectedMessage && (
+        <MessageModal
+          message={selectedMessage}
+          tags={tags}
+          onClose={() => setSelectedMessage(null)}
+        />
+      )}
+    </>
   );
 }

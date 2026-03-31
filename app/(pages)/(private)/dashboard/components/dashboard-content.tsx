@@ -93,7 +93,7 @@ export default async function DashboardContent({ page, tagId, date }: DashboardC
         <FilterPanel tags={tags} />
       </Suspense>
 
-      <MessagesList messages={messagesData.data} />
+      <MessagesList messages={messagesData.data} tags={tags} />
 
       <Suspense>
         <Pagination currentPage={page} totalPages={totalPages} />
