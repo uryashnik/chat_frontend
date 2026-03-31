@@ -20,6 +20,7 @@ async function getTags(cookieHeader: string): Promise<Tag[]> {
     });
     if (!res.ok) return [];
     const data = await res.json();
+    console.log('data: ', data);
     return Array.isArray(data) ? data : (data.data ?? []);
   } catch {
     return [];

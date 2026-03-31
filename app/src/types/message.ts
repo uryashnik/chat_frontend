@@ -1,6 +1,6 @@
 export interface Tag {
   id: number;
-  name: string;
+  label: string;
 }
 
 export interface MessageAuthor {

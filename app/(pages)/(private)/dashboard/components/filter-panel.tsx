@@ -3,6 +3,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
 import type { Tag } from '@/app/src/types/message';
+import DatePicker from '@/app/src/components/date-picker';
 
 interface FilterPanelProps {
   tags: Tag[];
@@ -38,53 +39,32 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
 
   const hasActiveFilters = currentTag || currentDateFrom || currentDateTo;
 
-  const inputClass =
-    'h-9 px-3 rounded-lg border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition';
-
-  return (
+    return (
     <div className="bg-white dark:bg-zinc-800 rounded-xl px-5 py-4 shadow-sm border border-zinc-200 dark:border-zinc-700">
       <div className="flex flex-wrap items-end gap-4">
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="filter-date-from"
-            className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide"
-          >
-            С (дата и время)
-          </label>
-          <input
-            id="filter-date-from"
-            type="datetime-local"
-            value={currentDateFrom}
-            onChange={(e) => updateParam('dateFrom', e.target.value)}
-            disabled={isPending}
-            className={inputClass}
-          />
-        </div>
+        <DatePicker
+          id="filter-date-from"
+          label="From (date & time)"
+          value={currentDateFrom}
+          onChange={(value) => updateParam('dateFrom', value)}
+          disabled={isPending}
+        />
 
-        <div className="flex flex-col gap-1.5">
-          <label
-            htmlFor="filter-date-to"
-            className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide"
-          >
-            По (дата и время)
-          </label>
-          <input
-            id="filter-date-to"
-            type="datetime-local"
-            value={currentDateTo}
-            min={currentDateFrom || undefined}
-            onChange={(e) => updateParam('dateTo', e.target.value)}
-            disabled={isPending}
-            className={inputClass}
-          />
-        </div>
+        <DatePicker
+          id="filter-date-to"
+          label="To (date & time)"
+          value={currentDateTo}
+          min={currentDateFrom || undefined}
+          onChange={(value) => updateParam('dateTo', value)}
+          disabled={isPending}
+        />
 
         <div className="flex flex-col gap-1.5">
           <label
             htmlFor="filter-tag"
             className="text-xs font-medium text-zinc-500 dark:text-zinc-400 uppercase tracking-wide"
           >
-            Тег
+            Tag
           </label>
           <select
             id="filter-tag"
@@ -93,10 +73,10 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
             disabled={isPending}
             className="h-9 px-3 rounded-lg border border-zinc-200 dark:border-zinc-600 bg-zinc-50 dark:bg-zinc-700 text-sm text-zinc-800 dark:text-zinc-100 focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:opacity-50 transition appearance-none pr-8 cursor-pointer"
           >
-            <option value="">Все теги</option>
+            <option value="">All tags</option>
             {tags.map((tag) => (
               <option key={tag.id} value={String(tag.id)}>
-                #{tag.name}
+                #{tag.label}
               </option>
             ))}
           </select>
@@ -108,7 +88,7 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
             disabled={isPending}
             className="h-9 px-4 rounded-lg text-sm font-medium text-zinc-500 dark:text-zinc-400 hover:text-red-500 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 border border-zinc-200 dark:border-zinc-600 transition disabled:opacity-50 cursor-pointer"
           >
-            Сбросить
+            Reset
           </button>
         )}
 
