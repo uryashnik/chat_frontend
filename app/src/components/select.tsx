@@ -12,6 +12,7 @@ interface SelectProps {
   placeholder?: string;
   disabled?: boolean;
   className?: string;
+  prefix?: string;
 }
 
 const defaultSelectClass =
@@ -26,6 +27,7 @@ export default function Select({
   placeholder,
   disabled = false,
   className = defaultSelectClass,
+  prefix = '#',
 }: SelectProps) {
   return (
     <div className="flex flex-col gap-1.5">
@@ -49,7 +51,7 @@ export default function Select({
         )}
         {options.map((option) => (
           <option key={option.id} value={String(option.id)}>
-            #{option.label}
+            {prefix}{option.label}
           </option>
         ))}
       </select>

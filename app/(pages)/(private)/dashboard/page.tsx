@@ -19,6 +19,7 @@ interface IProps {
 interface SearchParams {
   page?: string;
   tagId?: string;
+  authorId?: string;
   dateFrom?: string;
   dateTo?: string;
 }
@@ -26,11 +27,11 @@ interface SearchParams {
 export default async function DashboardPage({ searchParams }: IProps) {
   const params = await searchParams;
   const page = Math.max(1, Number(params.page ?? 1) || 1);
-  const { tagId, dateFrom, dateTo } = params;
+  const { tagId, authorId, dateFrom, dateTo } = params;
 
   return (
     <Suspense fallback={<Skeleton />}>
-      <Content page={page} tagId={tagId} dateFrom={dateFrom} dateTo={dateTo} />
+      <Content page={page} tagId={tagId} authorId={authorId} dateFrom={dateFrom} dateTo={dateTo} />
     </Suspense>
   );
 }

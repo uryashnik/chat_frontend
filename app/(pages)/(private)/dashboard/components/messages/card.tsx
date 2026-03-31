@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { Gender } from '@/app/src/enums/gender.enum';
 import type { Message } from '@/app/src/types/message';
+import { useUser } from '@/app/(pages)/(private)/user-context';
 
 function formatDate(dateString: string): string {
   try {
@@ -25,6 +26,9 @@ interface MessageCardProps {
 }
 
 export default function MessageCard({ message, onEdit, onDelete }: MessageCardProps) {
+  const user = useUser();
+  const isOwner = user.id === message.author.id;
+
   return (
     <article className="bg-white dark:bg-zinc-800 rounded-xl p-5 shadow-sm border border-zinc-200 dark:border-zinc-700 flex flex-col gap-4 hover:shadow-md transition-shadow select-none">
       <div className="flex items-start justify-between gap-3">
@@ -45,22 +49,24 @@ export default function MessageCard({ message, onEdit, onDelete }: MessageCardPr
           </div>
         </div>
 
-        <div className="flex items-center gap-1 shrink-0">
-          <button
-            onClick={onEdit}
-            title="Edit"
-            className={`${buttonClasses} hover:bg-blue-100 dark:hover:bg-blue-900/40`}
-          >
-            <Image src="/pencil.svg" alt="Edit" width={14} height={14} />
-          </button>
-          <button
-            onClick={onDelete}
-            title="Delete"
-            className={`${buttonClasses} hover:bg-red-100 dark:hover:bg-red-900/40`}
-          >
-            <Image src="/trash.svg" alt="Delete" width={14} height={14} />
-          </button>
-        </div>
+        {isOwner && (
+          <div className="flex items-center gap-1 shrink-0">
+            <button
+              onClick={onEdit}
+              title="Edit"
+              className={`${buttonClasses} hover:bg-blue-100 dark:hover:bg-blue-900/40`}
+            >
+              <Image src="/pencil.svg" alt="Edit" width={14} height={14} />
+            </button>
+            <button
+              onClick={onDelete}
+              title="Delete"
+              className={`${buttonClasses} hover:bg-red-100 dark:hover:bg-red-900/40`}
+            >
+              <Image src="/trash.svg" alt="Delete" width={14} height={14} />
+            </button>
+          </div>
+        )}
       </div>
 
       {message.tag && (

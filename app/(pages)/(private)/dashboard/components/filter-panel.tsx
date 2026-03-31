@@ -2,20 +2,22 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTransition } from 'react';
-import type { Tag } from '@/app/src/types/message';
+import type { Tag, User } from '@/app/src/types/message';
 import DatePicker from '@/app/src/components/date-picker';
 import Select from '@/app/src/components/select';
 
 interface FilterPanelProps {
   tags: Tag[];
+  users: User[];
 }
 
-export default function FilterPanel({ tags }: FilterPanelProps) {
+export default function FilterPanel({ tags, users }: FilterPanelProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [isPending, startTransition] = useTransition();
 
   const currentTag = searchParams.get('tagId') ?? '';
+  const currentUser = searchParams.get('authorId') ?? '';
   const currentDateFrom = searchParams.get('dateFrom') ?? '';
   const currentDateTo = searchParams.get('dateTo') ?? '';
 
@@ -38,7 +40,12 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
     });
   }
 
-  const hasActiveFilters = currentTag || currentDateFrom || currentDateTo;
+  const userOptions = users.map((u) => ({
+    id: u.id,
+    label: `${u.firstName} ${u.lastName}`,
+  }));
+
+  const hasActiveFilters = currentTag || currentUser || currentDateFrom || currentDateTo;
 
     return (
     <div className="bg-white dark:bg-zinc-800 rounded-xl px-5 py-4 shadow-sm border border-zinc-200 dark:border-zinc-700">
@@ -66,6 +73,17 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
           onChange={(value) => updateParam('tagId', value)}
           options={tags}
           placeholder="All tags"
+          disabled={isPending}
+        />
+
+        <Select
+          id="filter-user"
+          label="User"
+          value={currentUser}
+          onChange={(value) => updateParam('authorId', value)}
+          options={userOptions}
+          placeholder="All users"
+          prefix=""
           disabled={isPending}
         />
 

@@ -9,7 +9,7 @@ import {apiFetch} from '@/app/src/utils/api-fetch.util';
 
 export function updateMessage(
   id: number,
-  data: { text?: string; tagId?: number },
+  data: { text?: string; tag?: {id: number} },
 ) {
   return apiFetch(`${process.env.NEXT_PUBLIC_API_BASE}/messages/${id}`, {
     method: 'PATCH',
@@ -55,7 +55,7 @@ export default function EditMessageModal({ message, tags, onClose }: EditMessage
   
     const result = await updateMessage(message.id, {
       text: editText.trim() || undefined,
-      tagId: editTagId ? Number(editTagId) : undefined,
+      tag: editTagId ? { id: Number(editTagId) } : undefined,
     });
   
     if (result.error) {

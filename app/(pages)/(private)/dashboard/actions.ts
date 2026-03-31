@@ -2,7 +2,7 @@
 
 import { headers } from 'next/headers';
 import { redirect } from 'next/navigation';
-import type { Tag, MessagesResponse } from '@/app/src/types/message';
+import type { Tag, User, MessagesResponse } from '@/app/src/types/message';
 
 const MESSAGES_LIMIT = 6;
 
@@ -32,9 +32,25 @@ export async function getTags(): Promise<Tag[]> {
   }
 }
 
+export async function getUsers(): Promise<User[]> {
+  const cookieHeader = await getCookieHeader();
+  try {
+    const res = await fetch(`${process.env.API_BASE}/users`, {
+      headers: { Cookie: cookieHeader },
+      cache: 'no-store',
+    });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return Array.isArray(data) ? data : (data.data ?? []);
+  } catch {
+    return [];
+  }
+}
+
 export async function getMessages(
   page: number,
   tagId?: string,
+  authorId?: string,
   dateFrom?: string,
   dateTo?: string,
 ): Promise<MessagesResponse> {
@@ -43,6 +59,7 @@ export async function getMessages(
   url.searchParams.set('limit', String(MESSAGES_LIMIT));
   url.searchParams.set('page', String(page));
   if (tagId) url.searchParams.set('tagId', tagId);
+  if (authorId) url.searchParams.set('authorId', authorId);
   if (dateFrom) url.searchParams.set('dateFrom', new Date(dateFrom).toISOString());
   if (dateTo) url.searchParams.set('dateTo', new Date(dateTo).toISOString());
 
