@@ -71,18 +71,14 @@ export async function loginAction(
 
   try {
     const body = { email, password };
-    console.log('[login] →', 'POST /auth/login', 'body:', JSON.stringify(body));
 
-    const res = await fetch('http://localhost:3000/auth/login', {
+    const res = await fetch(`${process.env.API_BASE}/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body),
     });
 
     const responseText = await res.text();
-    console.log('[login] ←', res.status, res.statusText);
-    console.log('[login] ← body:', responseText);
-    console.log('[login] ← set-cookie:', res.headers.get('set-cookie'));
 
     if (!res.ok) {
       let data: Record<string, unknown> = {};
@@ -92,7 +88,6 @@ export async function loginAction(
 
     await forwardSetCookies(res);
   } catch (err) {
-    console.error('[login] fetch error:', err);
     return { errors: { general: 'Unable to connect to server. Please try again.' } };
   }
 

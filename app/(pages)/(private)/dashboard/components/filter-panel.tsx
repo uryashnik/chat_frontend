@@ -64,7 +64,7 @@ export default function FilterPanel({ tags }: FilterPanelProps) {
           label="Tag"
           value={currentTag}
           onChange={(value) => updateParam('tagId', value)}
-          options={tags.map((tag) => ({ id: tag.id, label: tag.label }))}
+          options={tags}
           placeholder="All tags"
           disabled={isPending}
         />
