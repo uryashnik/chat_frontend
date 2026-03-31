@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useTransition } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import type { Message, Tag } from '@/app/src/types/message';
 import Select from '@/app/src/components/select';
 import { deleteMessageAction, updateMessageAction } from '../actions';
@@ -10,6 +10,7 @@ interface MessageModalProps {
   message: Message;
   tags: Tag[];
   onClose: () => void;
+  isLastOnPage: boolean;
 }
 
 function formatDate(dateString: string): string {
@@ -26,8 +27,9 @@ function formatDate(dateString: string): string {
   }
 }
 
-export default function MessageModal({ message, tags, onClose }: MessageModalProps) {
+export default function MessageModal({ message, tags, onClose, isLastOnPage }: MessageModalProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [mode, setMode] = useState<'view' | 'edit' | 'delete'>('view');
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
@@ -84,7 +86,14 @@ export default function MessageModal({ message, tags, onClose }: MessageModalPro
         return;
       }
 
-      router.refresh();
+      const currentPage = Number(searchParams.get('page') ?? 1);
+      if (isLastOnPage && currentPage > 1) {
+        const params = new URLSearchParams(searchParams.toString());
+        params.set('page', String(currentPage - 1));
+        router.push(`?${params.toString()}`);
+      } else {
+        router.refresh();
+      }
       onClose();
     });
   }

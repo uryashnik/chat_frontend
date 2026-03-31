@@ -27,7 +27,12 @@ export default function MessagesList({ messages, tags }: IProps) {
   return (
     <>
       {selectedMessage && (
-        <MessageModal message={selectedMessage} tags={tags} onClose={() => setSelectedMessage(null)} />
+        <MessageModal
+          message={selectedMessage}
+          tags={tags}
+          onClose={() => setSelectedMessage(null)}
+          isLastOnPage={messages.length === 1}
+        />
       )}
       {!!messages.length ? (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
