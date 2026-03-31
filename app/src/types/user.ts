@@ -6,5 +6,5 @@ export interface User {
   lastName: string;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string | null;
+  deletedAt?: string;
 }
